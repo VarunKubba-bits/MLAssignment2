@@ -32,11 +32,14 @@ if uploaded_file:
     X = uploaded_df.iloc[:, :-1]
     y = uploaded_df.iloc[:, -1]
 
-    # Convert to numeric safely
-    X = X.apply(pd.to_numeric, errors="coerce")
+    # Convert to numeric
+    X = X.apply(pd.to_numeric, errors="coerce").fillna(0)
 
-    # Replace missing values
-    X = X.fillna(0)
+    expected_features = scaler.n_features_in_
+
+    if X.shape[1] != expected_features:
+        st.error(f"Expected {expected_features} features, but got {X.shape[1]}")
+        st.stop()
 
     X_scaled = scaler.transform(X.values)
     preds = model.predict(X_scaled)
