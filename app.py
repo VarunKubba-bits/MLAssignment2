@@ -16,18 +16,22 @@ model_name = st.selectbox(
 )
 
 if uploaded_file:
-    data = pd.read_csv(uploaded_file)
+    uploaded_df = pd.read_csv(uploaded_file)
 
-    model = joblib.load(f"model/{model_name}.pkl")
-    scaler = joblib.load("model/scaler.pkl")
+    model = joblib.load(os.path.join(MODEL_DIR, f"{model_name}.pkl"))
+    scaler = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
 
-    X = data.iloc[:, :-1]
-    y = data.iloc[:, -1]
+    # Separate X and y
+    X = uploaded_df.iloc[:, :-1]
+    y = uploaded_df.iloc[:, -1]
 
-    X = scaler.transform(X)
+    # Fix feature names mismatch
+    X = pd.DataFrame(X)
+    X.columns = scaler.feature_names_in_
 
-    preds = model.predict(X)
-
+    X_scaled = scaler.transform(X)
+    preds = model.predict(X_scaled)
+    
     st.subheader("Classification Report")
     st.text(classification_report(y, preds))
 
