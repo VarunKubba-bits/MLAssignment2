@@ -19,24 +19,11 @@ model_name = st.selectbox(
 if uploaded_file:
     uploaded_df = pd.read_csv(uploaded_file)
 
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    MODEL_DIR = os.path.join(BASE_DIR, "model")
-
-    model_path = os.path.join(MODEL_DIR, f"{model_name}.pkl")
-    scaler_path = os.path.join(MODEL_DIR, "scaler.pkl")
-
     model = joblib.load(model_path)
     scaler = joblib.load(scaler_path)
 
-    # Separate X and y
-    X = uploaded_df.iloc[:, :-1]
-    y = uploaded_df.iloc[:, -1]
-
-    # Fix feature names mismatch
-    X = pd.DataFrame(X)
-    feature_names = scaler.feature_names_in_
-    X = X[feature_names]
-    X_scaled = scaler.transform(X)
+    X = uploaded_df.iloc[:, :-1].values
+    y = uploaded_df.iloc[:, -1].values
 
     X_scaled = scaler.transform(X)
     preds = model.predict(X_scaled)
