@@ -34,7 +34,9 @@ if uploaded_file:
 
     # Fix feature names mismatch
     X = pd.DataFrame(X)
-    X.columns = scaler.feature_names_in_
+    feature_names = scaler.feature_names_in_
+    X = X[feature_names]
+    X_scaled = scaler.transform(X)
 
     X_scaled = scaler.transform(X)
     preds = model.predict(X_scaled)
