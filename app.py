@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 
 from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
@@ -18,8 +19,14 @@ model_name = st.selectbox(
 if uploaded_file:
     uploaded_df = pd.read_csv(uploaded_file)
 
-    model = joblib.load(os.path.join(MODEL_DIR, f"{model_name}.pkl"))
-    scaler = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    MODEL_DIR = os.path.join(BASE_DIR, "model")
+
+    model_path = os.path.join(MODEL_DIR, f"{model_name}.pkl")
+    scaler_path = os.path.join(MODEL_DIR, "scaler.pkl")
+
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
 
     # Separate X and y
     X = uploaded_df.iloc[:, :-1]
