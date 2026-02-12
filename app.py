@@ -17,6 +17,7 @@ model_name = st.selectbox(
 )
 
 if uploaded_file:
+    
     uploaded_df = pd.read_csv(uploaded_file)
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,10 +28,17 @@ if uploaded_file:
     model = joblib.load(model_path)
     scaler = joblib.load(scaler_path)
 
-    X = uploaded_df.iloc[:, :-1].values
-    y = uploaded_df.iloc[:, -1].values
+    # Separate features and target
+    X = uploaded_df.iloc[:, :-1]
+    y = uploaded_df.iloc[:, -1]
 
-    X_scaled = scaler.transform(X)
+    # Convert to numeric safely
+    X = X.apply(pd.to_numeric, errors="coerce")
+
+    # Replace missing values
+    X = X.fillna(0)
+
+    X_scaled = scaler.transform(X.values)
     preds = model.predict(X_scaled)
     
     st.subheader("Classification Report")
