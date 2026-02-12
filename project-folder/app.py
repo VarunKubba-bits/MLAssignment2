@@ -1,89 +1,43 @@
+import streamlit as st
 import pandas as pd
-import numpy as np
 import joblib
-import kagglehub
-import os
 
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.ensemble import RandomForestClassifier
+st.title("Classification Model Demo")
 
-from xgboost import XGBClassifier
+uploaded_file = st.file_uploader("Upload CSV test data", type=["csv"])
 
-from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    roc_auc_score,
-    matthews_corrcoef
+model_name = st.selectbox(
+    "Select Model",
+    ["logistic", "decision_tree", "knn", "naive_bayes", "random_forest", "xgboost"]
 )
 
-# Load dataset
-# Original download path (read-only)
-kaggle_download_root = kagglehub.dataset_download('nelgiriyewithana/credit-card-fraud-detection-dataset-2023')
-print(f"Kaggle dataset downloaded to: {kaggle_download_root}")
-print('Data source import complete.')
+if uploaded_file:
+    data = pd.read_csv(uploaded_file)
 
-file_path = os.path.join(kaggle_download_root, "creditcard_2023.csv")
-data = pd.read_csv(file_path, sep=',')
+    model = joblib.load(f"models/{model_name}.pkl")
+    scaler = joblib.load("models/scaler.pkl")
 
-# Correctly separate features (X) and target (y) from the DataFrame
-X = data.drop(['id', 'Class'], axis=1) # Drop 'id' and 'Class' to get features
-y = data['Class'] # 'Class' is the target variable
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
 
-# Split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+    X = scaler.transform(X)
 
-# Scale
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+    preds = model.predict(X)
 
-# Create 'models' directory if it doesn't exist
-if not os.path.exists("models"):
-    os.makedirs("models")
+    st.subheader("Classification Report")
+    st.text(classification_report(y, preds))
 
-joblib.dump(scaler, "models/scaler.pkl")
+    st.subheader("Confusion Matrix")
+    cm = confusion_matrix(y, preds)
 
-# Models
-models = {
-    "logistic": LogisticRegression(max_iter=500),
-    "decision_tree": DecisionTreeClassifier(),
-    "knn": KNeighborsClassifier(),
-    "naive_bayes": GaussianNB(),
-    "random_forest": RandomForestClassifier(),
-    "xgboost": XGBClassifier(use_label_encoder=False, eval_metric="logloss")
-}
+    fig, ax = plt.subplots()
+    sns.heatmap(cm, annot=True, fmt="d", ax=ax)
+    st.pyplot(fig)
 
-results = []
-
-for name, model in models.items():
-    model.fit(X_train, y_train)
-    preds = model.predict(X_test)
-    probs = model.predict_proba(X_test)[:, 1]
-
-    metrics = {
-        "Model": name,
-        "Accuracy": accuracy_score(y_test, preds),
-        "AUC": roc_auc_score(y_test, probs),
-        "Precision": precision_score(y_test, preds),
-        "Recall": recall_score(y_test, preds),
-        "F1": f1_score(y_test, preds),
-        "MCC": matthews_corrcoef(y_test, preds)
-    }
-
-    results.append(metrics)
-    joblib.dump(model, f"models/{name}.pkl")
-
-df = pd.DataFrame(results)
-print(df)
-df.to_csv("models/model_metrics.csv", index=False)
+    metrics_df = pd.read_csv("models/model_metrics.csv")
+    st.subheader("Saved Model Metrics")
+    st.dataframe(metrics_df)
