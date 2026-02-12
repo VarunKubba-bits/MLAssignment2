@@ -18,8 +18,8 @@ model_name = st.selectbox(
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
 
-    model = joblib.load(f"models/{model_name}.pkl")
-    scaler = joblib.load("models/scaler.pkl")
+    model = joblib.load(f"model/{model_name}.pkl")
+    scaler = joblib.load("model/scaler.pkl")
 
     X = data.iloc[:, :-1]
     y = data.iloc[:, -1]
