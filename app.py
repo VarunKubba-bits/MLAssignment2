@@ -53,10 +53,3 @@ if uploaded_file:
     fig, ax = plt.subplots()
     sns.heatmap(cm, annot=True, fmt="d", ax=ax)
     st.pyplot(fig)
-
-    st.subheader("Saved Model Metrics")
-
-    metrics_path = os.path.join(MODEL_DIR, "model_metrics.csv")
-    metrics_df = pd.read_csv(metrics_path)
-
-    st.dataframe(metrics_df)
