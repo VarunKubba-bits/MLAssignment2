@@ -60,6 +60,15 @@ if uploaded_file:
     preds = model.predict(X_scaled)
     
     st.subheader("Classification Report")
+
+    y_true = uploaded_df.iloc[:, -1].astype(int).values
+    y_pred = preds.astype(int)
+
+    report = classification_report(y_true, y_pred, output_dict=True)
+    report_df = pd.DataFrame(report).transpose()
+
+    st.dataframe(report_df)
+    
     st.text(classification_report(y, preds))
 
     st.subheader("Confusion Matrix")
