@@ -1,4 +1,4 @@
-<img width="481" height="25" alt="image" src="https://github.com/user-attachments/assets/caef9516-a1fa-4562-9126-ba2576cd48c2" /># ML Assignment 2 — Classification Models & Streamlit Deployment
+# ML Assignment 2 — Classification Models & Streamlit Deployment
 
 ## Problem Statement
 The objective of this assignment is to implement multiple machine learning classification models on a real-world dataset, evaluate their performance using standard metrics, and deploy an interactive Streamlit web application to demonstrate predictions.
