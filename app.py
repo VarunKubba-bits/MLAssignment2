@@ -66,5 +66,8 @@ if uploaded_file:
     cm = confusion_matrix(y, preds)
 
     fig, ax = plt.subplots()
-    sns.heatmap(cm, annot=True, fmt="d", ax=ax)
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("Actual")
+
     st.pyplot(fig)
