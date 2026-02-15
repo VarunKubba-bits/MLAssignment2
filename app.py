@@ -19,7 +19,7 @@ with open("model_metrics.csv", "rb") as f:
     st.sidebar.download_button(
         label="Download Credit Card CSV",
         data=f,
-        file_name="model_metriics.csv",
+        file_name="model_metrics.csv",
         mime="text/csv"
     )
 
