@@ -61,26 +61,24 @@ if uploaded_file:
     
     st.subheader("Classification Report")
 
-    st.subheader("Model Comparison Table")
-
     metrics_path = os.path.join("comparison_model_metrics.csv")
     metrics_df = pd.read_csv(metrics_path)
     
     st.dataframe(metrics_df)
 
-    X = uploaded_df.iloc[:, :-1]
-    X = X.apply(pd.to_numeric, errors="coerce").fillna(0)
+    # X = uploaded_df.iloc[:, :-1]
+    # X = X.apply(pd.to_numeric, errors="coerce").fillna(0)
 
-    X_scaled = scaler.transform(X.values)
-    preds = model.predict(X_scaled)
+    # X_scaled = scaler.transform(X.values)
+    # preds = model.predict(X_scaled)
 
-    y_true = uploaded_df.iloc[:, -1].astype(int).values
-    y_pred = preds.astype(int)
+    # y_true = uploaded_df.iloc[:, -1].astype(int).values
+    # y_pred = preds.astype(int)
 
-    report = classification_report(y_true, y_pred, output_dict=True)
-    report_df = pd.DataFrame(report).transpose()
+    # report = classification_report(y_true, y_pred, output_dict=True)
+    # report_df = pd.DataFrame(report).transpose()
 
-    st.dataframe(report_df)
+    # st.dataframe(report_df)
     
     st.text(classification_report(y, preds))
 
