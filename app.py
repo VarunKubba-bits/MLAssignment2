@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import os
 
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, matthews_corrcoef
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -60,6 +60,12 @@ if uploaded_file:
     preds = model.predict(X_scaled)
     
     st.subheader("Classification Report")
+
+    X = uploaded_df.iloc[:, :-1]
+    X = X.apply(pd.to_numeric, errors="coerce").fillna(0)
+
+    X_scaled = scaler.transform(X.values)
+    preds = model.predict(X_scaled)
 
     y_true = uploaded_df.iloc[:, -1].astype(int).values
     y_pred = preds.astype(int)
