@@ -80,7 +80,7 @@ if uploaded_file:
 
     # st.dataframe(report_df)
     
-    #st.text(classification_report(y, preds))
+    st.text(classification_report(y, preds))
 
     st.subheader("Confusion Matrix")
     cm = confusion_matrix(y, preds)
