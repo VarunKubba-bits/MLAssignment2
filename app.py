@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import os
 
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, matthews_corrcoef
+from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -83,28 +83,6 @@ if uploaded_file:
     st.dataframe(report_df)
     
     st.text(classification_report(y, preds))
-
-    # ---------------------------------------------------
-    # Evaluation Metrics
-    # ---------------------------------------------------
-    accuracy = accuracy_score(y, y_pred)
-    precision = precision_score(y, y_pred)
-    recall = recall_score(y, y_pred)
-    f1 = f1_score(y, y_pred)
-    auc = roc_auc_score(y, y_prob)
-    mcc = matthews_corrcoef(y, y_pred)
-
-    st.subheader("Evaluation Metrics")
-
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Accuracy", f"{accuracy:.4f}")
-    col2.metric("AUC Score", f"{auc:.4f}")
-    col3.metric("Precision", f"{precision:.4f}")
-
-    col4, col5, col6 = st.columns(3)
-    col4.metric("Recall", f"{recall:.4f}")
-    col5.metric("F1 Score", f"{f1:.4f}")
-    col6.metric("MCC", f"{mcc:.4f}")
 
     st.subheader("Confusion Matrix")
     cm = confusion_matrix(y, preds)
