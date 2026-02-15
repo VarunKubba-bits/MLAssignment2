@@ -61,6 +61,13 @@ if uploaded_file:
     
     st.subheader("Classification Report")
 
+    st.subheader("Model Comparison Table")
+
+    metrics_path = os.path.join(MODEL_DIR, "model_metrics.csv")
+    metrics_df = pd.read_csv(metrics_path)
+    
+    st.dataframe(metrics_df)
+
     X = uploaded_df.iloc[:, :-1]
     X = X.apply(pd.to_numeric, errors="coerce").fillna(0)
 
