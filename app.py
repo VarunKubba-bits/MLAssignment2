@@ -13,7 +13,7 @@ st.title("Classification Model Demo")
 # Download File
 # ---------------------------------------------------
 
-st.sidebar.header("Download Bank CSV Dataset")
+st.sidebar.header("Download Credit Card CSV Dataset")
 # Download button
 with open("model_metrics.csv", "rb") as f:
     st.sidebar.download_button(
