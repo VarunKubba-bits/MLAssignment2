@@ -9,6 +9,21 @@ import matplotlib.pyplot as plt
 
 st.title("Classification Model Demo")
 
+# ---------------------------------------------------
+# Download File
+# ---------------------------------------------------
+
+st.sidebar.header("Download Bank CSV Dataset")
+# Download button
+with open("model/bank.csv", "rb") as f:
+    st.sidebar.download_button(
+        label="Download Bank CSV",
+        data=f,
+        file_name="bank.csv",
+        mime="text/csv"
+    )
+
+
 uploaded_file = st.file_uploader("Upload CSV test data", type=["csv"])
 
 model_name = st.selectbox(
