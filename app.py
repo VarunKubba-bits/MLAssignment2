@@ -63,7 +63,7 @@ if uploaded_file:
 
     st.subheader("Model Comparison Table")
 
-    metrics_path = os.path.join(MODEL_DIR, "model_metrics.csv")
+    metrics_path = os.path.join("comparison_model_metrics.csv")
     metrics_df = pd.read_csv(metrics_path)
     
     st.dataframe(metrics_df)
